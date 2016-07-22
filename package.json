@@ -1,0 +1,22 @@
+{
+  "name": "echods-wp-theme",
+  "version": "1.0.0",
+  "description": "Echods WP theme starter for wordpress projects",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icemancast/echods-wp-theme.git"
+  },
+  "author": "Isaac Castillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/icemancast/echods-wp-theme/issues"
+  },
+  "homepage": "https://github.com/icemancast/echods-wp-theme#readme",
+  "dependencies": {
+    "bootstrap-sass": "^3.3.6"
+  }
+}

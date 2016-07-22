@@ -1,1 +1,1 @@
-# Echo Design Solutions Core WP Theme
+# Echods Core WP Theme
