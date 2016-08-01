@@ -75,10 +75,7 @@ gulp.task('scriptsVendor', (cb) => {
 });
 
 gulp.task('scripts', ['lint'], () => {
-return gulp.src([
-      `!${c.paths.jsVendorSrc}/**`,
-      `${c.paths.jsSrc}/**/*.js`
-    ])
+  return gulp.src(`${c.paths.jsSrc}/app.js`)
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(concat("app.min.js"))
@@ -87,7 +84,7 @@ return gulp.src([
 });
 
 gulp.task('lint', () => {
-  return gulp.src(`c.paths.jsSrc/app.js`)
+  return gulp.src(`{c.paths.jsSrc}/app.js`)
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
     .pipe(jshint.reporter('fail'));
@@ -99,7 +96,10 @@ gulp.task('watch', () => {
      console.log(`File ${e.path} was ${e.type}, running Sass task..`);
    });
 
-  gulp.watch(`c.paths.jsSrc/**/*.js`, ['scripts'])
+gulp.watch([
+      `!${c.paths.jsVendorSrc}/**`,
+      `${c.paths.jsSrc}/**/*.js`
+    ], ['scripts'])
    .on('change', (e) => {
      console.log(`File ${e.path} was ${e.type}, running Sass task..`);
    });
