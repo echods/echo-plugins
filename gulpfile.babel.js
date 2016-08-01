@@ -1,14 +1,16 @@
 'use strict';
 
 import gulp from 'gulp';
-import sass from 'gulp-sass';
-import autoprefixer from 'gulp-autoprefixer';
-import sourcemaps from 'gulp-sourcemaps';
-import uglify from 'gulp-uglify';
 import pump from 'pump';
+import sass from 'gulp-sass';
+import babel from 'gulp-babel';
+import concat from 'gulp-concat';
 import jshint from 'gulp-jshint';
-import stylish from 'jshint-stylish';
 import notify from 'gulp-notify';
+import uglify from 'gulp-uglify';
+import stylish from 'jshint-stylish';
+import sourcemaps from 'gulp-sourcemaps';
+import autoprefixer from 'gulp-autoprefixer';
 
 /*
 * https://babeljs.io/docs/usage/polyfill/
@@ -27,8 +29,9 @@ const c = {
     sassSrc: `${source}/sass/**/*.scss`,
     sassDest: `${assets}/css`,
     jsNonNpmVendor: `${source}/js/vendor`,
-    jsSrc: `${source}/js/app.js`,
-    jsDest: `${assets}/js/app.js`
+    jsSrc: `${source}/js`,
+    jsVendorSrc: `${source}/js/vendor`,
+    jsDest: `${assets}/js/`
   },
   sassOpts: {
     outputStyle: 'compressed',
@@ -38,68 +41,69 @@ const c = {
     browsers: ['last 2 versions']
   },
   vendorOrder: [
-    'file1.js',
-    'file2.js'
+    `${source}/js/vendor/html5.js`,
+    `${source}/js/vendor/functions.js`,
+    `${source}/js/vendor/customize-preview.js`,
+    `${source}/js/vendor/skip-link-focus-fix.js`,
+    `${source}/js/vendor/color-scheme-control.js`,
+    `${source}/js/vendor/keyboard-image-navigation.js`,
   ]
 }
 
 // Sass task to compile
 gulp.task('sass', () => {
   return gulp
-    .src( c.paths.sassSrc )
-    .pipe( sourcemaps.init() )
-    .pipe( sass( c.sassOpts ).on('error', sass.logError) )
-    .pipe( autoprefixer( c.prefixerOpts ) )
-    .pipe( sourcemaps.write() )
-    .pipe( gulp.dest( c.paths.sassDest ) )
-    .pipe( notify('Sass file ran correctly') );
+    .src(c.paths.sassSrc)
+    .pipe(sourcemaps.init())
+    .pipe(sass(c.sassOpts).on('error', sass.logError))
+    .pipe(autoprefixer(c.prefixerOpts))
+    .pipe(sourcemaps.write(c.paths.sassDest))
+    .pipe(gulp.dest(c.paths.sassDest))
+    .pipe(notify('Sass compiled. Complete.'));
 });
 
-gulp.task('lint', function() {
-  return gulp.src( c.paths.jsSrc )
-    .pipe( jshint() )
-    .pipe( jshint.reporter(stylish) )
-    .pipe( jshint.reporter('fail') );
+// Compile all js vendor files
+gulp.task('scriptsVendor', (cb) => {
+  pump([
+    gulp.src( c.vendorOrder ),
+    concat('vendors.min.js'),
+    uglify(),
+    gulp.dest( c.paths.jsDest )
+  ],
+  cb
+  );
 });
 
-gulp.task('scriptsVendor', function() {
-  return gulp.src( c.vendorOrder )
-    .pipe(gulp.dest( c.paths.jsDest ));
-});
-
-gulp.task('scripts', () => {
-  return gulp.src("src/**/*.js")
+gulp.task('scripts', ['lint'], () => {
+return gulp.src([
+      `!${c.paths.jsVendorSrc}/**`,
+      `${c.paths.jsSrc}/**/*.js`
+    ])
     .pipe(sourcemaps.init())
     .pipe(babel())
-    .pipe(concat("all.js"))
+    .pipe(concat("app.min.js"))
     .pipe(sourcemaps.write("."))
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest(c.paths.jsDest));
 });
 
+gulp.task('lint', () => {
+  return gulp.src(`c.paths.jsSrc/app.js`)
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish))
+    .pipe(jshint.reporter('fail'));
+});
 
-//gulp.task('watch', () => {
-  //gulp.watch('./src/sass/**/*.scss', ['sass'])
-   //.on('change', (e) => {
-// console.log(`File ${e.path} was ${e.type}, running Sass task..`);
-     //console.log('test'); // Template strings and interpolation!!
-// e.path, e.type
-   //});
-//});
+gulp.task('watch', () => {
+  gulp.watch(c.paths.sassSrc, ['sass'])
+   .on('change', (e) => {
+     console.log(`File ${e.path} was ${e.type}, running Sass task..`);
+   });
 
-// https://github.com/terinjokes/gulp-uglify/blob/master/docs/why-use-pump/README.md#why-use-pump
-//var gulp = require('gulp');
-//var uglify = require('gulp-uglify');
-//var pump = require('pump');
-
-//gulp.task('compress', function (cb) {
-  //pump([
-        //gulp.src('lib/*.js'),
-        //uglify(),
-        //gulp.dest('dist')
-    //],
-    //cb
-  //);
-//});
+  gulp.watch(`c.paths.jsSrc/**/*.js`, ['scripts'])
+   .on('change', (e) => {
+     console.log(`File ${e.path} was ${e.type}, running Sass task..`);
+   });
+});
 
 gulp.task('build', ['sass', 'scriptsVendor', 'scripts']);
 gulp.task('default', ['build']);
