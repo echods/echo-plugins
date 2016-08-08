@@ -421,7 +421,7 @@ add_action( 'wp_enqueue_scripts', 'echods_color_scheme_css' );
  * @since Echods 1.0
  */
 function echods_customize_control_js() {
-	wp_enqueue_script( 'color-scheme-control', get_template_directory_uri() . '/js/color-scheme-control.js', array( 'customize-controls', 'iris', 'underscore', 'wp-util' ), '20160412', true );
+	wp_enqueue_script( 'color-scheme-control', get_template_directory_uri() . '/assets/js/vendor/color-scheme-control.js', array( 'customize-controls', 'iris', 'underscore', 'wp-util' ), '20160412', true );
 	wp_localize_script( 'color-scheme-control', 'colorScheme', echods_get_color_schemes() );
 }
 add_action( 'customize_controls_enqueue_scripts', 'echods_customize_control_js' );
@@ -432,7 +432,7 @@ add_action( 'customize_controls_enqueue_scripts', 'echods_customize_control_js' 
  * @since Echods 1.0
  */
 function echods_customize_preview_js() {
-	wp_enqueue_script( 'echods-customize-preview', get_template_directory_uri() . '/js/customize-preview.js', array( 'customize-preview' ), '20160412', true );
+	wp_enqueue_script( 'echods-customize-preview', get_template_directory_uri() . '/assets/js/vendor/customize-preview.js', array( 'customize-preview' ), '20160412', true );
 }
 add_action( 'customize_preview_init', 'echods_customize_preview_js' );
 

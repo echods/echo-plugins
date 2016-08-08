@@ -41,12 +41,13 @@ const c = {
     browsers: ['last 2 versions']
   },
   vendorOrder: [
-    `${source}/js/vendor/html5.js`,
-    `${source}/js/vendor/functions.js`,
-    `${source}/js/vendor/customize-preview.js`,
     `${source}/js/vendor/skip-link-focus-fix.js`,
+    `${source}/js/vendor/functions.js`
+  ],
+  scriptsToMovie: [
     `${source}/js/vendor/color-scheme-control.js`,
-    `${source}/js/vendor/keyboard-image-navigation.js`,
+    `${source}/js/vendor/customize-preview.js`,
+    `${source}/js/vendor/keyboard-image-navigation.js`
   ]
 }
 
@@ -57,7 +58,7 @@ gulp.task('sass', () => {
     .pipe(sourcemaps.init())
     .pipe(sass(c.sassOpts).on('error', sass.logError))
     .pipe(autoprefixer(c.prefixerOpts))
-    .pipe(sourcemaps.write(c.paths.sassDest))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(c.paths.sassDest))
     .pipe(notify('Sass compiled. Complete.'));
 });
@@ -65,24 +66,33 @@ gulp.task('sass', () => {
 // Compile all js vendor files
 gulp.task('scriptsVendor', (cb) => {
   pump([
-    gulp.src( c.vendorOrder ),
+    gulp.src(c.vendorOrder),
+    sourcemaps.init(),
     concat('vendors.min.js'),
     uglify(),
-    gulp.dest( c.paths.jsDest )
+    sourcemaps.write('.'),
+    gulp.dest(c.paths.jsDest),
   ],
   cb
   );
 });
 
-gulp.task('scripts', ['lint'], () => {
-  return gulp.src(`${c.paths.jsSrc}/app.js`)
-    .pipe(sourcemaps.init())
-    .pipe(babel())
-    .pipe(concat("app.min.js"))
-    .pipe(sourcemaps.write("."))
-    .pipe(gulp.dest(c.paths.jsDest));
+// Application scripts
+gulp.task('scripts', ['lint'], (cb) => {
+  pump([
+    gulp.src(`${c.paths.jsSrc}/app.js`),
+    sourcemaps.init(),
+    babel(),
+    concat('app.min.js'),
+    uglify(),
+    sourcemaps.write('.'),
+    gulp.dest(c.paths.jsDest),
+  ],
+  cb
+  );
 });
 
+// Lint for script checking
 gulp.task('lint', () => {
   return gulp.src(`{c.paths.jsSrc}/app.js`)
     .pipe(jshint())
@@ -91,12 +101,15 @@ gulp.task('lint', () => {
 });
 
 gulp.task('watch', () => {
+
+  // Watch css changes
   gulp.watch(c.paths.sassSrc, ['sass'])
    .on('change', (e) => {
      console.log(`File ${e.path} was ${e.type}, running Sass task..`);
    });
 
-gulp.watch([
+  // Watch script changes
+  gulp.watch([
       `!${c.paths.jsVendorSrc}/**`,
       `${c.paths.jsSrc}/**/*.js`
     ], ['scripts'])
@@ -105,5 +118,10 @@ gulp.watch([
    });
 });
 
-gulp.task('build', ['sass', 'scriptsVendor', 'scripts']);
+gulp.task('moveScripts', () => {
+  return gulp.src(c.scriptsToMovie)
+    .pipe(gulp.dest('./assets/js/vendor'));
+});
+
+gulp.task('build', ['sass', 'scriptsVendor', 'scripts', 'moveScripts']);
 gulp.task('default', ['build']);
