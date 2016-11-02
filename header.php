@@ -72,10 +72,4 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
-
-        <div class="row">
-
-            <?php if ( get_header_image() ) : ?>
-                <?php get_template_part('template-parts', 'header-image'); ?>
-            <?php endif; // End header image check. ?>
+    <div class="container">

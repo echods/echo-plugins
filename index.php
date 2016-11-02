@@ -16,8 +16,13 @@
 
 get_header(); ?>
 
-    <div id="primary" class="content-area">
-        <main id="main" class="site-main" role="main">
+    <div class="row">
+
+        <?php if ( get_header_image() ) : ?>
+            <?php get_template_part('template-parts', 'header-image'); ?>
+        <?php endif; // End header image check. ?>
+
+        <main id="main" class="site-main col-md-9" role="main">
 
         <?php if ( have_posts() ) : ?>
 
@@ -55,8 +60,11 @@ get_header(); ?>
         endif;
         ?>
 
-        </main><!-- .site-main -->
-    </div><!-- .content-area -->
+        </main>
 
-<?php get_sidebar(); ?>
+        <div class="col-md-3">
+            <?php get_sidebar(); ?>
+        </div>
+
+    </div>
 <?php get_footer(); ?>

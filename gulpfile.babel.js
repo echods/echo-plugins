@@ -12,6 +12,10 @@ import stylish from 'jshint-stylish';
 import sourcemaps from 'gulp-sourcemaps';
 import autoprefixer from 'gulp-autoprefixer';
 
+// var gulp = require('gulp');
+// var babel = require('gulp-babel');
+
+
 /*
 * https://babeljs.io/docs/usage/polyfill/
 * Note: Depending on what ES2015 methods you actually use,
@@ -78,18 +82,21 @@ gulp.task('scriptsVendor', (cb) => {
 });
 
 // Application scripts
-gulp.task('scripts', ['lint'], (cb) => {
-  pump([
-    gulp.src(`${c.paths.jsSrc}/app.js`),
-    sourcemaps.init(),
-    babel(),
-    concat('app.min.js'),
-    uglify(),
-    sourcemaps.write('.'),
-    gulp.dest(c.paths.jsDest),
-  ],
-  cb
-  );
+gulp.task('scripts', ['lint'], () => {
+  return gulp.src(`${c.paths.jsSrc}/app.js`)
+  .pipe(babel())
+  .pipe(gulp.dest(c.paths.jsDest))
+  // pump([
+  //   gulp.src(`${c.paths.jsSrc}/app.js`),
+  //   sourcemaps.init(),
+  //   babel(),
+  //   // concat('app.min.js'),
+  //   // uglify(),
+  //   sourcemaps.write('.'),
+  //   gulp.dest(c.paths.jsDest),
+  // ],
+  // cb
+  // );
 });
 
 // Lint for script checking

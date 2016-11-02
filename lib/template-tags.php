@@ -246,7 +246,9 @@ if ( ! function_exists( 'echods_the_custom_logo' ) ) :
  */
 function echods_the_custom_logo() {
 	if ( function_exists( 'the_custom_logo' ) ) {
-		the_custom_logo();
+        $custom_logo_id = get_theme_mod( 'custom_logo' );
+        $image = wp_get_attachment_image_src( $custom_logo_id , ‘full’ );
+        return $image[0];
 	}
 }
 endif;

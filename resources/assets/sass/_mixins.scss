@@ -1,0 +1,12 @@
+@mixin gradient-down($color-top, $color-middle, $color-bottom, $color-middle-position: '') {
+    background: $color-top; /* Old browsers */
+    background: -moz-linear-gradient(top, $color-top 0%, $color-middle $color-middle-position, $color-bottom 100%);
+    background: -webkit-linear-gradient(top, $color-top 0%, $color-middle $color-middle-position, $color-bottom 100%);
+    background: linear-gradient(to bottom, $color-top 0%, $color-middle $color-middle-position, $color-bottom 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color-top', endColorstr='$color-bottom',GradientType=0 );
+}
+
+@mixin content-padding($size: 3rem) {
+    padding-top: $size;
+    padding-bottom: $size;
+}
