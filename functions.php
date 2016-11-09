@@ -234,7 +234,7 @@ function echods_scripts() {
     wp_enqueue_script( 'echods-vendors', get_template_directory_uri() . '/assets/js/vendors.min.js', array(), '20160412', true );
 	wp_enqueue_script( 'echods-script', get_template_directory_uri() . '/assets/js/app.js', array('jquery'), '20160412', true );
 
-	wp_localize_script( 'echods-screenReader', 'screenReaderText', array(
+	wp_localize_script( 'echods-vendors', 'screenReaderText', array(
 		'expand'   => __( 'expand child menu', 'echods' ),
 		'collapse' => __( 'collapse child menu', 'echods' ),
 	) );
