@@ -380,6 +380,16 @@ add_filter( 'widget_tag_cloud_args', 'echods_widget_tag_cloud_args' );
 require get_template_directory() . '/lib/BootstrapWalker.php';
 
 /**
+ * Filter through gravity forms
+ */
+add_filter( 'gform_field_container', 'add_bootstrap_container_class', 10, 6 );
+function add_bootstrap_container_class( $field_container, $field, $form, $css_class, $style, $field_content ) {
+    $id = $field->id;
+    $field_id = is_admin() || empty( $form ) ? "field_{$id}" : 'field_' . $form['id'] . "_$id";
+    return '<li id="' . $field_id . '" class="' . $css_class . ' form-group">{FIELD_CONTENT}</li>';
+}
+
+/**
  * Advanced custom fields global options
  */
 if( function_exists('acf_add_options_page') ) {
