@@ -7,6 +7,34 @@
 }
 
 @mixin content-padding($size: 3rem) {
+    padding: $size;
+}
+
+@mixin content-padding-tb($size: 3rem) {
     padding-top: $size;
     padding-bottom: $size;
+}
+
+@mixin content-padding-lr($size: 3rem) {
+    padding-left: $size;
+    padding-right: $size;
+}
+
+@mixin content-margin($size: 3rem) {
+    margin: $size;
+}
+
+@mixin content-margin-tb($size: 3rem) {
+    margin-top: $size;
+    margin-bottom: $size;
+}
+
+@mixin content-margin-lr($size: 3rem) {
+    margin-left: $size;
+    margin-right: $size;
+}
+
+@mixin font-sizing($size) {
+    font-size: #{$size};
+    font-size: px-to-rem($size);
 }

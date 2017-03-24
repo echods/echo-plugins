@@ -11,6 +11,8 @@ import uglify from 'gulp-uglify';
 import stylish from 'jshint-stylish';
 import sourcemaps from 'gulp-sourcemaps';
 import autoprefixer from 'gulp-autoprefixer';
+import requirejs from 'requirejs';
+// import autoprefixer from 'gulp-autoprefixer';
 
 // var gulp = require('gulp');
 // var babel = require('gulp-babel');
@@ -22,8 +24,6 @@ import autoprefixer from 'gulp-autoprefixer';
 * you may not need to use babel-polyfill or the runtime plugin.
 * -------------------------------------------------------------
 */
-// import 'babel-polyfill';
-
 const assets = './assets'
 const source = './resources/assets'
 
@@ -44,10 +44,10 @@ const c = {
   prefixerOpts: {
     browsers: ['last 2 versions']
   },
-  vendorOrder: [
-    `${source}/js/vendor/skip-link-focus-fix.js`,
-    `${source}/js/vendor/functions.js`
-  ],
+  // vendorOrder: [
+  //   // `${source}/js/vendor/skip-link-focus-fix.js`,
+  //   // `${source}/js/vendor/functions.js`
+  // ],
   scriptsToMovie: [
     `${source}/js/vendor/color-scheme-control.js`,
     `${source}/js/vendor/customize-preview.js`,
@@ -69,13 +69,19 @@ gulp.task('sass', () => {
 
 // Compile all js vendor files
 gulp.task('scriptsVendor', (cb) => {
+  // return gulp.src(`${c.paths.jsSrc}/vendors.js`)
+  // .pipe(babel())
+  // .pipe(gulp.dest(c.paths.jsDest))
   pump([
-    gulp.src(c.vendorOrder),
+    gulp.src(`${c.paths.jsSrc}/vendors.js`),
     sourcemaps.init(),
-    concat('vendors.min.js'),
+    babel(),
+    require(),
+  //   concat('vendors.min.js'),
     uglify(),
+
     sourcemaps.write('.'),
-    gulp.dest(c.paths.jsDest),
+  //   gulp.dest(c.paths.jsDest),
   ],
   cb
   );

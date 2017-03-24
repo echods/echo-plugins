@@ -45,7 +45,10 @@ if ( ! function_exists( 'echods_setup' ) ) :
  * @since Echods 1.0
  */
 function echods_setup() {
-	/*
+
+    define('HIDE_FORM_LABELS', true);
+
+    /*
 	 * Make theme available for translation.
 	 * Translations can be filed in the /languages/ directory.
 	 * If you're building a theme based on Echods, use a find and replace
@@ -204,25 +207,6 @@ function echods_scripts() {
 	// Theme stylesheet.
 	wp_enqueue_style( 'echods-style', get_template_directory_uri() . '/assets/css/app.css' );
 
-	// Load the Internet Explorer specific stylesheet.
-	// wp_enqueue_style( 'echods-ie', get_template_directory_uri() . '/css/ie.css', array( 'echods-style' ), '20160412' );
-	// wp_style_add_data( 'echods-ie', 'conditional', 'lt IE 10' );
-
-	// // Load the Internet Explorer 8 specific stylesheet.
-	// wp_enqueue_style( 'echods-ie8', get_template_directory_uri() . '/css/ie8.css', array( 'echods-style' ), '20160412' );
-	// wp_style_add_data( 'echods-ie8', 'conditional', 'lt IE 9' );
-
-	// // Load the Internet Explorer 7 specific stylesheet.
-	// wp_enqueue_style( 'echods-ie7', get_template_directory_uri() . '/css/ie7.css', array( 'echods-style' ), '20160412' );
-	// wp_style_add_data( 'echods-ie7', 'conditional', 'lt IE 8' );
-
-
-    if( !is_admin()) {
-        wp_deregister_script('jquery');
-        wp_register_script('jquery', ('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'), true, '3.1.0');
-        wp_enqueue_script('jquery');
-    }
-
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -231,7 +215,7 @@ function echods_scripts() {
 		wp_enqueue_script( 'echods-keyboard-image-navigation', get_template_directory_uri() . '/assets/vendor/js/keyboard-image-navigation.js', array( 'jquery' ), '20160412', true );
 	}
 
-    wp_enqueue_script( 'echods-vendors', get_template_directory_uri() . '/assets/js/vendors.min.js', array(), '20160412', true );
+    wp_enqueue_script( 'echods-vendors', get_template_directory_uri() . '/assets/js/vendors.js', array(), '20160412', true );
 	wp_enqueue_script( 'echods-script', get_template_directory_uri() . '/assets/js/app.js', array('jquery'), '20160412', true );
 
 	wp_localize_script( 'echods-vendors', 'screenReaderText', array(

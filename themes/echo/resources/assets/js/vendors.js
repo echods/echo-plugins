@@ -1,0 +1,1 @@
+import './resources/assets/js/vendor/skip-link-focus-fix.js';
