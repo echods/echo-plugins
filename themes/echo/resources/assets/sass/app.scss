@@ -1,8 +1,9 @@
-@import 'colors';
+// @import 'colors';
 @import 'variables';
-@import "~bootstrap/css/bootstrap";
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
 @import 'accessibility';
 @import 'functions';
 @import 'mixins';
 @import 'media-queries';
+@import '~font-awesome/scss/font-awesome';
 @import 'styles';
