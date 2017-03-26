@@ -1,4 +1,0 @@
-@function px-to-rem($pixel, $base: 10px) {
-  $rem-size: $pixel / $base;
-  @return #{$rem-size}rem;
-}
